@@ -47,7 +47,6 @@ function App() {
   const addMsgToHistory = (historyEntry) => {
     // update chat history
     chatHistoryRef.current.push(historyEntry)
-    msgRef.current.value = "" // clear input message field
   }
 
   // OWN messages sent
@@ -55,16 +54,14 @@ function App() {
     e.preventDefault()
 
     // grab input message from the user by looking up the DOM value
-    let msg = msgRef.current.value
-
-    // construct a history entry
-    let historyEntry = { text: msg, user: userName }
+    let msg = msgRef.current.value    
+    let historyEntry = { text: msg, user: userName } // construct a history entry
 
     addMsgToHistory(historyEntry) // and MY messages to history
+    msgRef.current.value = "" // clear input message field
 
-    // emit event to server (socket io)
+    // emit event to server (socket io) => therefore we need to grab socket client
     let socket = socketRef.current
-
     // send message to server => server should then broadcast it!
     socket.emit("message", historyEntry)
 
